@@ -9,7 +9,28 @@ router.get('/', async (req, res) => {
             .then(patients => res.render('patients', { patients }))
             .catch(err => console.log(err))
     } catch (error) {
-        res.status(400).send('Server Error');
+        res.status(500).send('Server Error');
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const patient = await Patient.findById({ _id: req.params.id })
+            .then(patient => res.render('patient', { patient }))
+            .catch(err => console.log(err))
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+});
+
+
+router.get('/add', async (req, res) => {
+    try {
+        const patient = await Patient.find()
+            .then(patient => res.render('add-patient', { patient }))
+            .catch(err => console.log(err))
+    } catch (error) {
+        res.status(500).send('Server Error');
     }
 });
 
@@ -18,21 +39,32 @@ router.post('/add', async (req, res) => {
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
+    let hospital = req.body.hospital;
+    let name = req.body.name;
+    let room = req.body.room;
+    let slug = "";
+    if (slug == "")
+        slug = name.toLowerCase();
+    let details = req.body.details;
+
     const patient = new Patient({
-        name: req.body.name,
-        details: req.body.details
+        hospital,
+        name,
+        room,
+        details,
+        slug
     });
 
     try {
         const savePatient = await patient.save();
         res.send('Patient successfully created');
     } catch (error) {
-        res.status(400).send('Server Error');
+        res.status(500).send('Server Error');
     }
 });
 
 
-router.delete('/delete/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const patient = await Patient.findById({ _id: req.params.id })
 
@@ -40,12 +72,12 @@ router.delete('/delete/:id', async (req, res) => {
 
         res.redirect('/api/patients');
     } catch (error) {
-        res.status(400).send('Server Error');
+        res.status(500).send('Server Error');
     }
 });
 
 
-router.post('/update/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     // Validate
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -53,17 +85,30 @@ router.post('/update/:id', async (req, res) => {
     try {
         const patient = await Patient.findById({ _id: req.params.id });
 
+        patient.hospital = req.body.hospital;
         patient.name = req.body.name;
+        patient.room = req.body.room;
         patient.details = req.body.details;
 
         await patient.save();
 
-        res.send('Patient Successfully updated');
+        res.redirect('/api/patients');
 
     } catch (error) {
-        res.status(400).send('Server Error');
+        res.status(500).send('Server Error');
     }
 });
+
+
+// router.get('/search', async (req, res) => {
+//     const patient = req.query.patient;
+
+//     Patient.find({
+//         $text: {
+//             $search: 
+//         }
+//     })
+// });
 
 
 module.exports = router;

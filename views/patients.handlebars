@@ -5,8 +5,8 @@
             {{name}}
         </a>
         <span class="badge badge-default badge-pill">
-            <form action="/api/patients/delete/{{id}}" method="post">
-                <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+            <form method="POST" action="/api/patients/{{id}}?_method=DELETE">
+                <button class="btn btn-danger" type="submit"><i class="fas fa-times"></i></button>
             </form>
         </span>
     </li>

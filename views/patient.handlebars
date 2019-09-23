@@ -1,0 +1,31 @@
+<section class="container pt-xl-5 pl-xl-4">
+    <br>
+    <form action="/api/patients/{{patient.id}}?_method=PUT" method="POST">
+        <div class="form-group">
+            <label for="">Hospital:</label>
+            <input type="text" name="hospital" class="form-control" value="{{patient.hospital}}">
+        </div>
+        <div class="form-group">
+            <label for="">Name:</label>
+            <input type="text" name="name" class="form-control" value="{{patient.name}}">
+        </div>
+        <div class="form-group">
+            <label for="">Room:</label>
+            <input type="text" name="room" class="form-control" value="{{patient.room}}">
+        </div>
+        <div class="form-group">
+            <label for="">Details:</label>
+            <textarea name="details" cols="30" rows="10" class="form-control">{{patient.details}}
+            </textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <hr>
+
+    <form action="" method="POST">
+        <input type="button" class="btn btn-info" value="Discharge" name="done">
+    </form>
+
+</section>

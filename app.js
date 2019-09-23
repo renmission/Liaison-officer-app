@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -11,6 +12,8 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology
     if (err) return console.log(err);
     console.log('DB connection successfully.');
 });
+
+app.use(methodOverride('_method'));
 
 // Body Parser
 app.use(express.json());

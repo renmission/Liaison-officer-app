@@ -1,13 +1,24 @@
 <section class="container pt-xl-5 pl-xl-4">
     <br>
-    <form action="/api/patients/add" method="POST">
+    <form action="/api/patients/pt/add" method="POST">
         <div class="form-group">
-            <input type="text" name="name" placeholder="Enter Name" value="">
+            <label for="">Hospital:</label>
+            <input type="text" name="hospital" class="form-control" value="{{hospital}}">
         </div>
         <div class="form-group">
-            <textarea name="details" cols="30" rows="20" class="form-control">
+            <label for="">Name:</label>
+            <input type="text" name="name" class="form-control" value="{{name}}">
+        </div>
+        <div class="form-group">
+            <label for="">Room:</label>
+            <input type="text" name="room" class="form-control" value="{{room}}">
+        </div>
+        <div class="form-group">
+            <label for="">Details:</label>
+            <textarea name="details" cols="30" rows="10" class="form-control">{{details}}
             </textarea>
         </div>
-        <input type="button" class="btn btn-primary" value="Update" name="submit">
+
+        <button type="submit" class="btn btn-primary">Add Patient</button>
     </form>
 </section>

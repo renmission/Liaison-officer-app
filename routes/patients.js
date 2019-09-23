@@ -13,28 +13,30 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id', async (req, res) => {
+
+router.get('/pt/add', async (req, res) => {
+    const patient = await Patient.find({});
+
     try {
-        const patient = await Patient.findById({ _id: req.params.id })
-            .then(patient => res.render('patient', { patient }))
-            .catch(err => console.log(err))
+        res.render('add-patient', { patient });
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
+router.get('/pt/:id', async (req, res) => {
+    const patient = await Patient.findOne({_id: req.params.id});
 
-router.get('/add', async (req, res) => {
-    try {
-        const patient = await Patient.find()
-            .then(patient => res.render('add-patient', { patient }))
-            .catch(err => console.log(err))
-    } catch (error) {
+     try {
+         res.render('patient', { patient });
+     } catch (error) {
         res.status(500).send('Server Error');
-    }
+     }
+    
 });
 
-router.post('/add', async (req, res) => {
+
+router.post('/pt/add', async (req, res) => {
     // Validate
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -44,7 +46,7 @@ router.post('/add', async (req, res) => {
     let room = req.body.room;
     let slug = "";
     if (slug == "")
-        slug = name.toLowerCase();
+        slug = name.replace(/\s+/g, '-').toLowerCase();
     let details = req.body.details;
 
     const patient = new Patient({
@@ -57,7 +59,7 @@ router.post('/add', async (req, res) => {
 
     try {
         const savePatient = await patient.save();
-        res.send('Patient successfully created');
+        res.redirect('/api/patients');
     } catch (error) {
         res.status(500).send('Server Error');
     }

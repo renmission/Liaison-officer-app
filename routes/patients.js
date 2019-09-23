@@ -80,7 +80,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-router.put('/:id', async (req, res) => {
+router.put('/pt/:id', async (req, res) => {
     // Validate
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -101,8 +101,6 @@ router.put('/:id', async (req, res) => {
         res.status(500).send('Server Error');
     }
 });
-
-
 
 
 router.get('/search', (req, res) => {

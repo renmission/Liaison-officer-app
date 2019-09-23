@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Patient = require('../models/Patient');
 const { patientValidation } = require('../validation');
+const { escapeRegex } = require('../helpers/search');
 
 
 router.get('/', async (req, res) => {
@@ -102,15 +103,22 @@ router.put('/:id', async (req, res) => {
 });
 
 
-// router.get('/search', async (req, res) => {
-//     const patient = req.query.patient;
 
-//     Patient.find({
-//         $text: {
-//             $search: 
-//         }
-//     })
-// });
 
+router.get('/search', (req, res) => {
+
+    if (req.query.search) {
+
+        const regex = new RegExp(escapeRegex(req.query.search), 'gi');
+
+        Patient.find({ "name": regex }, (err, foundPatient) => {
+
+        if(err) return console.log(err);
+
+        res.render('search', { foundPatient });
+
+        }); 
+     }
+});
 
 module.exports = router;

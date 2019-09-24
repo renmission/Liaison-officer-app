@@ -12,6 +12,15 @@ const patientValidation = (data) => {
     return schema.validate(data);
 }
 
+const patientValidationTwo = (data) => {
+    const schema = Joi.object({
+        category: Joi.required(),
+        details: Joi.required()
+    });
+
+    return schema.validate(data);
+}
+
 const categoryValidation = (data) => {
     const schema = Joi.object({
         name: Joi.required()
@@ -20,4 +29,5 @@ const categoryValidation = (data) => {
 }
 
 module.exports.patientValidation = patientValidation;
+module.exports.patientValidationTwo = patientValidationTwo;
 module.exports.categoryValidation = categoryValidation;

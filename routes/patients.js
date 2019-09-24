@@ -1,8 +1,46 @@
 const router = require('express').Router();
+const path = require('path');
 const Patient = require('../models/Patient');
 const Category = require('../models/Category');
-const { patientValidation, categoryValidation } = require('../validation');
+
+const { patientValidation, categoryValidation, patientValidationTwo } = require('../validation');
 const { escapeRegex } = require('../helpers/search');
+const multer = require('multer');
+
+// Storage
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/uploads');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+// Init Upload
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 1000000 },
+    fileFilter: (req, file, cb) => {
+        checkFileType(file, cb)
+    }
+}).single('myImage');
+
+// Check file type
+function checkFileType(file, cb) {
+    //allowed ext
+    const fileTypes = /jpeg|jpg|png|gif|webp|pdf/;
+    // check ext
+    const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+    //check mime
+    const mimetype = fileTypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+        return cb(null, true)
+    } else {
+        cb('Error: Images Only!');
+    }
+}
 
 
 router.get('/', async (req, res) => {
@@ -112,19 +150,14 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-router.put('/pt/:id', async (req, res) => {
-    // Validate
-    const { error } = patientValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+router.put('/pt/:id', upload, async (req, res) => {
+    const patient = await Patient.findById({ _id: req.params.id });
 
     try {
-        const patient = await Patient.findById({ _id: req.params.id });
-
-        patient.hospital = req.body.hospital;
-        patient.name = req.body.name;
         patient.room = req.body.room;
         patient.category = req.body.category;
         patient.details = req.body.details;
+        patient.myImage = req.file.filename;
 
         await patient.save();
 

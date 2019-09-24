@@ -27,6 +27,9 @@ const patientSchema = new Schema({
         type: String,
         required: true
     },
+    myImage: {
+        type: String
+    },
     slug: {
         type: String
     }

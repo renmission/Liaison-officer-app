@@ -3,19 +3,32 @@
     <form action="/api/patients/pt/add" method="POST">
         <div class="form-group">
             <label for="">Hospital:</label>
-            <input type="text" name="hospital" class="form-control" value="{{hospital}}">
+            <input type="text" name="hospital" class="form-control" value="{{hospital}}"
+                placeholder="Enter hospital name" required autofocus>
         </div>
         <div class="form-group">
             <label for="">Name:</label>
-            <input type="text" name="name" class="form-control" value="{{name}}">
+            <input type="text" name="name" class="form-control" value="{{name}}" placeholder="Enter surname, firstname"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="">Category:</label>
+
+            <select name="category" id="category" class="form-control">
+                {{#each categories}}
+                <option value="{{id}}">{{name}}</option>
+                {{/each}}
+            </select>
+
         </div>
         <div class="form-group">
             <label for="">Room:</label>
-            <input type="text" name="room" class="form-control" value="{{room}}">
+            <input type="text" name="room" class="form-control" value="{{room}}" placeholder="Enter room number"
+                required>
         </div>
         <div class="form-group">
             <label for="">Details:</label>
-            <textarea name="details" cols="30" rows="10" class="form-control">{{details}}
+            <textarea name="details" cols="30" rows="10" class="form-control" required>{{details}}
             </textarea>
         </div>
 

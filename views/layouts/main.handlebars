@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>LO APP</title>
+    <title>Welcome to LOA</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.3/examples/navbar-fixed/">
 
@@ -22,56 +22,45 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <a class="navbar-brand" href="/api/patients">Liaison</a>
-        <div class="navbar">
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+
+        <a class="navbar-brand" href="/api/patients">LOA</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="basicExampleNav">
+
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="/api/patients/pt/add"><i class="fas fa-user-plus fa-2x"></i></a>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/categories">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/api/patients/pt/add">Add Patient</a>
                 </li>
             </ul>
+
+            <form method="GET" action="/api/patients/search" class="form-inline">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search Patient">
+                    <div class="input-group-append">
+                        <button type="submit" name="submit" class="btn btn-secondary"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+
         </div>
     </nav>
-
-    {{#if patient }}
-
+    <!--/.Navbar-->
 
     <main role="main" class="container">
         {{{ body }}}
     </main>
 
-    {{else}}
-
-    <div class="container">
-        <br />
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-10">
-
-                <!-- Search form -->
-                <form method="GET" action="/api/patients/search">
-                    <div class="input-group mb-4 border rounded-pill p-1">
-                        <input type="text" name="search" placeholder="Enter patient name"
-                            aria-describedby="button-addon3" class="form-control bg-none border-0">
-                        <div class="input-group-append border-0">
-                            <button id="button-addon3" type="submit" name="submit" class="btn btn-link text-success"><i
-                                    class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </form>
-
-
-            </div>
-            <!--end of col-->
-
-        </div>
-    </div>
-
-
-    <main role="main" class="container">
-        {{{ body }}}
-    </main>
-
-    {{/if}}
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>

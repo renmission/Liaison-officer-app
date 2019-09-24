@@ -1,12 +1,14 @@
 const router = require('express').Router();
 const Patient = require('../models/Patient');
-const { patientValidation } = require('../validation');
+const Category = require('../models/Category');
+const { patientValidation, categoryValidation } = require('../validation');
 const { escapeRegex } = require('../helpers/search');
 
 
 router.get('/', async (req, res) => {
     try {
         const patients = Patient.find()
+            .populate('category')
             .then(patients => res.render('patients', { patients }))
             .catch(err => console.log(err))
     } catch (error) {
@@ -15,8 +17,16 @@ router.get('/', async (req, res) => {
 });
 
 
+router.get('/pt/add', (req, res) => {
+    Category.find({})
+        .then(categories => {
+            res.render('add-patient', { categories });
+        })
+        .catch(err => console.log(err))
+});
+
 router.get('/pt/add', async (req, res) => {
-    const patient = await Patient.find({});
+    const categories = await Category.find({});
 
     try {
         res.render('add-patient', { patient });
@@ -26,14 +36,17 @@ router.get('/pt/add', async (req, res) => {
 });
 
 router.get('/pt/:id', async (req, res) => {
-    const patient = await Patient.findOne({_id: req.params.id});
+    Patient.findById({ _id: req.params.id })
 
-     try {
-         res.render('patient', { patient });
-     } catch (error) {
-        res.status(500).send('Server Error');
-     }
-    
+        .then(patient => {
+
+            Category.findOne({})
+                .then(categories => {
+                    res.render('patient', { patient, categories });
+                })
+
+        })
+        .catch(err => console.log(err))
 });
 
 
@@ -49,13 +62,15 @@ router.post('/pt/add', async (req, res) => {
     if (slug == "")
         slug = name.replace(/\s+/g, '-').toLowerCase();
     let details = req.body.details;
+    let category = req.body.category;
 
     const patient = new Patient({
         hospital,
         name,
         room,
         details,
-        slug
+        slug,
+        category
     });
 
     try {
@@ -91,6 +106,7 @@ router.put('/pt/:id', async (req, res) => {
         patient.hospital = req.body.hospital;
         patient.name = req.body.name;
         patient.room = req.body.room;
+        patient.category = req.body.category;
         patient.details = req.body.details;
 
         await patient.save();
@@ -111,12 +127,14 @@ router.get('/search', (req, res) => {
 
         Patient.find({ "name": regex }, (err, foundPatient) => {
 
-        if(err) return console.log(err);
+            if (err) return console.log(err);
 
-        res.render('search', { foundPatient });
+            res.render('search', { foundPatient });
 
-        }); 
-     }
+        }).populate('category')
+    } else {
+        res.redirect('/api/patients');
+    }
 });
 
 module.exports = router;

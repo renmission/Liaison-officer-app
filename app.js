@@ -23,7 +23,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // SET template engine
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+const { select, generateDate, paginate } = require('./helpers/hbs-helpers');
+app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: { select: select, generateDate: generateDate, paginate: paginate } }));
 app.set('view engine', 'handlebars');
 
 // landing page
@@ -31,5 +32,6 @@ app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
 
 // Init Routes
 app.use('/api/patients', require('./routes/patients'));
+app.use('/api/categories', require('./routes/categories'));
 
 app.listen(3000, () => { console.log('Server start on port 3000....') });

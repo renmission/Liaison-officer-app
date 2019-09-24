@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
-const patientSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const patientSchema = new Schema({
+    category: {
+        type: Schema.Types.ObjectId,
+        ref: 'categories'
+    },
     hospital: {
         type: String,
         required: true

@@ -27,12 +27,82 @@
             <label for="">Room:</label>
             <input type="text" name="room" class="form-control" value="{{patient.room}}" required>
         </div>
+
+        <div class="form-group">
+            <label for="">LOG:</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile01"
+                        aria-describedby="inputGroupFileAddon01" name="s_sidebar">
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                </div>
+
+            </div>
+            <img src="#" id="imgPreview" alt="" style="margin: 50px">
+        </div>
+
+
         <div class="form-group">
             <label for="">Details:</label>
             <textarea name="details" cols="30" rows="10" class="form-control" required>{{patient.details}}
             </textarea>
         </div>
 
+
+
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </section>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+
+            reader.onload = function (e) {
+                $("#imgPreview").attr('src', e.target.result).width(100);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#inputGroupFile01").change(function () {
+        readURL(this);
+    });
+</script>
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+    <div id="caption"></div>
+</div>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById("myModal");
+
+    // Get the image and insert it inside the modal - use its "alt" text as a caption
+    var img = document.getElementById("imgPreview");
+    var modalImg = document.getElementById("img01");
+    var captionText = document.getElementById("caption");
+    img.onclick = function () {
+        modal.style.display = "block";
+        modalImg.src = this.src;
+        captionText.innerHTML = this.alt;
+    }
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+</script>

@@ -6,10 +6,27 @@ const { escapeRegex } = require('../helpers/search');
 
 
 router.get('/', async (req, res) => {
+    const perPage = 10;
+    const page = req.query.page || 1;
+
     try {
         const patients = Patient.find()
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
             .populate('category')
-            .then(patients => res.render('patients', { patients }))
+            .then(patients => {
+
+                Patient.collection.countDocuments()
+                    .then(patientCount => {
+                        res.render('patients', {
+
+                            patients,
+                            current: parseInt(page),
+                            pages: Math.ceil(patientCount / perPage),
+
+                        });
+                    });
+            })
             .catch(err => console.log(err))
     } catch (error) {
         res.status(500).send('Server Error');

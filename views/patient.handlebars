@@ -14,11 +14,11 @@
             <label for="">Category:</label>
 
             <select name="category" id="category" class="form-control">
-                {{#select patient.category}}
+                {{!-- {{#select patient.category}} --}}
                 {{#each categories}}
                 <option value="{{id}}">{{name}}</option>
                 {{/each}}
-                {{/select}}
+                {{!-- {{/select}} --}}
             </select>
 
         </div>
@@ -80,7 +80,7 @@
 
 
 <!-- The Modal -->
-<div id="myModal" class="modal">
+<div id="myModal" class="myModal">
     <span class="close">&times;</span>
     <img class="modal-content" id="img01">
     <div id="caption"></div>
@@ -88,14 +88,14 @@
 
 <script>
     // Get the modal
-    var modal = document.getElementById("myModal");
+    var logModal = document.getElementById("myModal");
 
     // Get the image and insert it inside the modal - use its "alt" text as a caption
     var img = document.getElementById("myImage");
     var modalImg = document.getElementById("img01");
     var captionText = document.getElementById("caption");
     img.onclick = function () {
-        modal.style.display = "block";
+        logModal.style.display = "block";
         modalImg.src = this.src;
         captionText.innerHTML = this.alt;
     }
@@ -105,6 +105,6 @@
 
     // When the user clicks on <span> (x), close the modal
     span.onclick = function () {
-        modal.style.display = "none";
+        logModal.style.display = "none";
     }
 </script>

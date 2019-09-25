@@ -33,7 +33,6 @@ const patientSchema = new Schema({
     slug: {
         type: String
     }
-
 });
 
 module.exports = Patient = mongoose.model('Patient', patientSchema);

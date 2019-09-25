@@ -90,20 +90,6 @@ router.get('/pt/add', async (req, res) => {
     }
 });
 
-router.get('/pt/:id', async (req, res) => {
-    Patient.findById({ _id: req.params.id })
-
-        .then(patient => {
-
-            Category.findOne({})
-                .then(categories => {
-                    res.render('patient', { patient, categories });
-                })
-
-        })
-        .catch(err => console.log(err))
-});
-
 
 router.post('/pt/add', async (req, res) => {
     // Validate
@@ -150,21 +136,36 @@ router.delete('/:id', async (req, res) => {
 });
 
 
+
+router.get('/pt/:id', async (req, res) => {
+
+    const patient = await Patient.findById({ _id: req.params.id });
+    const categories = await Category.find();
+
+    try {
+        res.render('patient', { patient, categories });
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+});
+
+
 router.put('/pt/:id', upload, async (req, res) => {
     const patient = await Patient.findById({ _id: req.params.id });
 
-    try {
-        patient.room = req.body.room;
-        patient.category = req.body.category;
-        patient.details = req.body.details;
-        patient.myImage = req.file.filename;
+    patient.room = req.body.room;
+    patient.category = req.body.category;
+    patient.details = req.body.details;
+    patient.myImage = req.file.filename;
 
-        await patient.save();
+    try {
+
+        const savePatient = await patient.save();
 
         res.redirect('/api/patients');
 
     } catch (error) {
-        res.status(500).send('Server Error');
+        console.error('ERROR:', error.message);
     }
 });
 

@@ -7,7 +7,7 @@ const { patientValidation, categoryValidation, patientValidationTwo } = require(
 const { escapeRegex } = require('../helpers/search');
 const multer = require('multer');
 
-const verify = require('../verifyToken');
+
 
 // Storage
 const storage = multer.diskStorage({
@@ -45,7 +45,7 @@ function checkFileType(file, cb) {
 }
 
 
-router.get('/', verify,  async (req, res) => {
+router.get('/', async (req, res) => {
     const perPage = 10;
     const page = req.query.page || 1;
 
@@ -74,7 +74,7 @@ router.get('/', verify,  async (req, res) => {
 });
 
 
-router.get('/pt/add', verify, (req, res) => {
+router.get('/pt/add', (req, res) => {
     Category.find({})
         .then(categories => {
             res.render('add-patient', { categories });
@@ -82,7 +82,7 @@ router.get('/pt/add', verify, (req, res) => {
         .catch(err => console.log(err))
 });
 
-router.get('/pt/add',verify, async (req, res) => {
+router.get('/pt/add', async (req, res) => {
     const categories = await Category.find({});
 
     try {
@@ -93,7 +93,7 @@ router.get('/pt/add',verify, async (req, res) => {
 });
 
 
-router.post('/pt/add', verify, async (req, res) => {
+router.post('/pt/add', async (req, res) => {
     // Validate
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -118,20 +118,20 @@ router.post('/pt/add', verify, async (req, res) => {
 
     try {
         const savePatient = await patient.save();
-        res.redirect('/api/patients');
+        res.redirect('/patients');
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
 
-router.delete('/:id',verify, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const patient = await Patient.findById({ _id: req.params.id })
 
         await patient.delete();
 
-        res.redirect('/api/patients');
+        res.redirect('/patients');
     } catch (error) {
         res.status(500).send('Server Error');
     }
@@ -139,7 +139,7 @@ router.delete('/:id',verify, async (req, res) => {
 
 
 
-router.get('/pt/:id', verify, async (req, res) => {
+router.get('/pt/:id', async (req, res) => {
 
     const patient = await Patient.findById({ _id: req.params.id });
     const categories = await Category.find();
@@ -152,7 +152,7 @@ router.get('/pt/:id', verify, async (req, res) => {
 });
 
 
-router.put('/pt/:id', [verify, upload], async (req, res) => {
+router.put('/pt/:id', upload, async (req, res) => {
     const patient = await Patient.findById({ _id: req.params.id });
 
     patient.room = req.body.room;
@@ -164,7 +164,7 @@ router.put('/pt/:id', [verify, upload], async (req, res) => {
 
         const savePatient = await patient.save();
 
-        res.redirect('/api/patients');
+        res.redirect('/patients');
 
     } catch (error) {
         console.error('ERROR:', error.message);
@@ -172,7 +172,7 @@ router.put('/pt/:id', [verify, upload], async (req, res) => {
 });
 
 
-router.get('/search',verify,(req, res) => {
+router.get('/search', (req, res) => {
 
     if (req.query.search) {
 
@@ -186,7 +186,7 @@ router.get('/search',verify,(req, res) => {
 
         }).populate('category')
     } else {
-        res.redirect('/api/patients');
+        res.redirect('/patients');
     }
 });
 

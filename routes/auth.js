@@ -1,63 +1,56 @@
 const router = require('express').Router();
+const passport = require('passport');
+const localStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
-const { registerValidation, loginValidation } = require('../validation');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
-
-
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
+    if (req.user) return res.render('/patients');
     res.render('index', { layout: 'landing' });
 });
 
-router.post('/register', async (req, res) => {
-    const { error } = registerValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+//APP LOGIN
+passport.use(new localStrategy({ usernameField: 'email' }, (email, password, done) => {
 
-    // check if user already exist 
-    const emailExist = await User.findOne({ email: req.body.email });
-    if (emailExist) return res.status(400).send('email already exist');
+    User.findOne({ email: email }).then(user => {
+        if (!user) return done(null, false, { message: 'No user found' });
 
-    //hash password - bcrypt
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(req.body.password, salt);
+        bcrypt.compare(password, user.password, (err, matched) => {
 
-    // Create a new user
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hash
+            if (err) return err;
+
+            if (matched) {
+                return done(null, user);
+            } else {
+                return done(null, false, { message: 'Incorrect password' });
+            }
+
+        });
     });
+}));
 
-    try {
-        const saveUser = await user.save();
-        res.redirect('/');
-    } catch (error) {
-        res.status(400).send(error);
-    }
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
 });
 
-router.post('/', async (req, res) => {
-    // Validate
-    const { error } = loginValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
-    // check if user do not exist
-    const user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send('email is not found');
-
-    // if password is match
-    const match = await bcrypt.compare(req.body.password, user.password);
-    if (!match) return res.status(400).send('Invalid password');
-
-    // create and assign token
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
-    res.header('auth-token', token);
-    res.cookie('auth-token', token);
-
-    res.redirect('/api/patients');
+passport.deserializeUser(function (id, done) {
+    User.findById(id, function (err, user) {
+        done(err, user);
+    });
 });
 
+router.post('/', (req, res, next) => {
+    passport.authenticate('local', {
+        successRedirect: '/patients',
+        failureRedirect: '/',
+        failureFlash: true
+    })(req, res, next);
+});
+
+router.get('/logout', (req, res) => {
+    req.logout();
+    res.redirect('/');
+});
 
 module.exports = router;

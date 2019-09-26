@@ -1,6 +1,6 @@
 <section class="container pt-xl-5 pl-xl-4">
     <br>
-    <form action="/api/categories/add" method="POST">
+    <form action="/categories/add" method="POST">
         <div class="form-group">
             <label for="">Category Name:</label>
             <input type="text" name="name" class="form-control" value="{{name}}" placeholder="Enter category name"
@@ -13,11 +13,11 @@
 
     {{#each categories}}
     <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold mb-2">
-        <a href="/api/categories/{{id}}" class="font-weight-bold">
+        <a href="/categories/{{id}}" class="font-weight-bold">
             {{name}}
         </a>
         <span class="badge badge-default badge-pill">
-            <form method="POST" action="/api/categories/{{id}}?_method=DELETE">
+            <form method="POST" action="/categories/{{id}}?_method=DELETE">
                 <button class="btn btn-danger" type="submit"><i class="fas fa-times"></i></button>
             </form>
         </span>

@@ -2,9 +2,13 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+
+const passport = require('passport');
+
 
 const app = express();
 
@@ -15,20 +19,25 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology
     console.log('DB connection successfully.');
 });
 
+
 app.use(methodOverride('_method'));
 
 // session
 app.use(session({
-    secret: 'mysecretkey',
+    secret: process.env.SECRET_KEY,
     resave: true,
     saveUninitialized: true
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cookieParser());
 
 // Body Parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(flash());
 
 // SET static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -38,12 +47,11 @@ const { select, generateDate, paginate } = require('./helpers/hbs-helpers');
 app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: { select: select, generateDate: generateDate, paginate: paginate } }));
 app.set('view engine', 'handlebars');
 
-// landing page
-// app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
-
 // Init Routes
 app.use('/', require('./routes/auth'));
-app.use('/api/patients', require('./routes/patients'));
-app.use('/api/categories', require('./routes/categories'));
+app.use('/patients', require('./routes/patients'));
+app.use('/categories', require('./routes/categories'));
 
-app.listen(3000, () => { console.log('Server start on port 3000....') });
+const port = process.env.PORT || 3000;
+
+app.listen(port, () => { console.log(`Server start on port ${port}....`) });

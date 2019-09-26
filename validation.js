@@ -2,11 +2,11 @@ const Joi = require('@hapi/joi');
 
 const patientValidation = (data) => {
     const schema = Joi.object({
-        hospital: Joi.required(),
-        name: Joi.required(),
-        room: Joi.required(),
-        category: Joi.required(),
-        details: Joi.required()
+        hospital: Joi.string().required(),
+        name: Joi.string().required(),
+        room: Joi.string().required(),
+        category: Joi.string().required(),
+        details: Joi.string().required()
     });
 
     return schema.validate(data);
@@ -14,16 +14,33 @@ const patientValidation = (data) => {
 
 const patientValidationTwo = (data) => {
     const schema = Joi.object({
-        category: Joi.required(),
-        details: Joi.required()
+        category: Joi.string().required(),
+        details: Joi.string().required()
     });
 
     return schema.validate(data);
 }
 
 const categoryValidation = (data) => {
+    const schema = Joi.string().object({
+        name: Joi.string().required()
+    });
+    return schema.validate(data);
+}
+
+const registerValidation = (data) => {
     const schema = Joi.object({
-        name: Joi.required()
+        name: Joi.string().required(),
+        email: Joi.string().required().email(),
+        password: Joi.string().min(6).required()
+    });
+    return schema.validate(data);
+}
+
+const loginValidation = (data) => {
+    const schema = Joi.object({
+        email: Joi.string().required(),
+        password: Joi.string().min(6).required()
     });
     return schema.validate(data);
 }
@@ -31,3 +48,5 @@ const categoryValidation = (data) => {
 module.exports.patientValidation = patientValidation;
 module.exports.patientValidationTwo = patientValidationTwo;
 module.exports.categoryValidation = categoryValidation;
+module.exports.loginValidation = loginValidation;
+module.exports.registerValidation = registerValidation;

@@ -2,7 +2,9 @@ const router = require('express').Router();
 const Category = require('../models/Category');
 const { categoryValidation } = require('../validation');
 
-router.get('/', async (req, res) => {
+const verify = require('../verifyToken');
+
+router.get('/',verify, async (req, res) => {
     const categories = await Category.find({});
 
     try {
@@ -13,7 +15,7 @@ router.get('/', async (req, res) => {
 });
 
 
-router.post('/add', async (req, res) => {
+router.post('/add',verify, async (req, res) => {
     const { error } = categoryValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -32,13 +34,13 @@ router.post('/add', async (req, res) => {
     }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id',verify, (req, res) => {
     Category.find({ _id: req.params.id })
         .then(category => res.render('edit-category', { category }))
         .catch(err => console.log(err))
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',verify, async (req, res) => {
     const { error } = categoryValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -55,7 +57,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',verify, async (req, res) => {
     const category = await Category.findById({ _id: req.params.id });
 
     try {

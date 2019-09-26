@@ -2,7 +2,9 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const methodOverride = require('method-override');
+var cookieParser = require('cookie-parser')
 
 const app = express();
 
@@ -14,6 +16,15 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useUnifiedTopology
 });
 
 app.use(methodOverride('_method'));
+
+// session
+app.use(session({
+    secret: 'mysecretkey',
+    resave: true,
+    saveUninitialized: true
+}));
+
+app.use(cookieParser());
 
 // Body Parser
 app.use(express.json());
@@ -31,7 +42,7 @@ app.set('view engine', 'handlebars');
 // app.get('/', (req, res) => res.render('index', { layout: 'landing' }));
 
 // Init Routes
-app.use('/', require('./routes'));
+app.use('/', require('./routes/auth'));
 app.use('/api/patients', require('./routes/patients'));
 app.use('/api/categories', require('./routes/categories'));
 

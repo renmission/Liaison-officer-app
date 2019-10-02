@@ -1,6 +1,60 @@
+/* SIDE NAV SLIDE */
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+    overflow-x: hidden;
+    padding-top: 60px;
+    transition: 0.5s;
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidenav a:hover {
+    color: #f92562;
+}
+
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+#main {
+    transition: margin-left .5s;
+    padding: 20px;
+}
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
+
+/* SIDE NAV SLIDE */
+
 .btn-danger {
     background: #f92562 !important;
 }
+
 
 /* button bottom */
 
@@ -51,7 +105,8 @@
     transform-origin: 85% bottom;
 }
 
-.fab:hover+.fab-options, .fab-options:hover {
+.fab:hover+.fab-options,
+.fab-options:hover {
     opacity: 1;
     transform: scale(1);
 }
@@ -73,6 +128,7 @@
     margin-right: 10px;
     color: #fff;
 }
+
 
 /* The Modal (background) */
 
@@ -99,6 +155,7 @@
     /* Black w/ opacity */
 }
 
+
 /* Modal Content (image) */
 
 .modal-content {
@@ -107,6 +164,7 @@
     width: 80%;
     max-width: 700px;
 }
+
 
 /* Caption of Modal Image */
 
@@ -121,9 +179,11 @@
     height: 150px;
 }
 
+
 /* Add Animation */
 
-.modal-content, #caption {
+.modal-content,
+#caption {
     -webkit-animation-name: zoom;
     -webkit-animation-duration: 0.6s;
     animation-name: zoom;
@@ -148,6 +208,7 @@
     }
 }
 
+
 /* The Close Button */
 
 .close {
@@ -160,11 +221,13 @@
     transition: 0.3s;
 }
 
-.close:hover, .close:focus {
+.close:hover,
+.close:focus {
     color: #bbb;
     text-decoration: none;
     cursor: pointer;
 }
+
 
 /* 100% Image Width on Smaller Screens */
 

@@ -2,13 +2,13 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const mongoose = require('mongoose');
-const flash = require('express-flash');
 const session = require('express-session');
 const methodOverride = require('method-override');
-const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 
 const passport = require('passport');
 
+require('./config/passport')(passport);
 
 const app = express();
 
@@ -32,7 +32,16 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(cookieParser());
+// flash message
+app.use(flash());
+// global 
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    res.locals.user = req.user || null;
+    next();
+});
 
 // Body Parser
 app.use(express.json());

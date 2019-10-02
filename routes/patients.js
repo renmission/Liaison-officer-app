@@ -5,6 +5,7 @@ const Category = require('../models/Category');
 
 const { patientValidation, categoryValidation, patientValidationTwo } = require('../validation');
 const { escapeRegex } = require('../helpers/search');
+const { ensureAuthenticated } = require('../helpers/hbs-helpers');
 const multer = require('multer');
 
 
@@ -45,12 +46,12 @@ function checkFileType(file, cb) {
 }
 
 
-router.get('/', async (req, res) => {
+router.get('/', ensureAuthenticated, async (req, res) => {
     const perPage = 10;
     const page = req.query.page || 1;
 
     try {
-        const patients = Patient.find()
+        const patients = Patient.find({ user: req.user.id })
             .skip((perPage * page) - perPage)
             .limit(perPage)
             .populate('category')
@@ -58,7 +59,7 @@ router.get('/', async (req, res) => {
 
                 Patient.collection.countDocuments()
                     .then(patientCount => {
-                        res.render('patients', {
+                        res.render('patients/index', {
 
                             patients,
                             current: parseInt(page),
@@ -73,27 +74,19 @@ router.get('/', async (req, res) => {
     }
 });
 
-
-router.get('/pt/add', (req, res) => {
-    Category.find({})
-        .then(categories => {
-            res.render('add-patient', { categories });
-        })
-        .catch(err => console.log(err))
-});
-
-router.get('/pt/add', async (req, res) => {
+router.get('/add', ensureAuthenticated, async (req, res) => {
+    const patient = await Patient.find({});
     const categories = await Category.find({});
 
     try {
-        res.render('add-patient', { patient });
+        res.render('patients/add', { patient, categories });
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
 
-router.post('/pt/add', async (req, res) => {
+router.post('/add', ensureAuthenticated, async (req, res) => {
     // Validate
     const { error } = patientValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -106,6 +99,7 @@ router.post('/pt/add', async (req, res) => {
         slug = name.replace(/\s+/g, '-').toLowerCase();
     let details = req.body.details;
     let category = req.body.category;
+    let user = req.user.id
 
     const patient = new Patient({
         hospital,
@@ -113,7 +107,8 @@ router.post('/pt/add', async (req, res) => {
         room,
         details,
         slug,
-        category
+        category,
+        user
     });
 
     try {
@@ -125,7 +120,7 @@ router.post('/pt/add', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
     try {
         const patient = await Patient.findById({ _id: req.params.id })
 
@@ -139,20 +134,26 @@ router.delete('/:id', async (req, res) => {
 
 
 
-router.get('/pt/:id', async (req, res) => {
+router.get('/:id', ensureAuthenticated, async (req, res) => {
 
     const patient = await Patient.findById({ _id: req.params.id });
     const categories = await Category.find();
 
     try {
-        res.render('patient', { patient, categories });
+
+        if (patient.user != req.user.id) {
+            req.flash('error_msg', 'Not Authorized');
+            res.redirect('/patients');
+        }
+
+        res.render('patients/edit', { patient, categories });
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
 
-router.put('/pt/:id', upload, async (req, res) => {
+router.put('/:id', ensureAuthenticated, upload, async (req, res) => {
     const patient = await Patient.findById({ _id: req.params.id });
 
     patient.room = req.body.room;
@@ -172,7 +173,7 @@ router.put('/pt/:id', upload, async (req, res) => {
 });
 
 
-router.get('/search', (req, res) => {
+router.get('/search', ensureAuthenticated, (req, res) => {
 
     if (req.query.search) {
 
@@ -182,7 +183,7 @@ router.get('/search', (req, res) => {
 
             if (err) return console.log(err);
 
-            res.render('search', { foundPatient });
+            res.render('/search', { foundPatient });
 
         }).populate('category')
     } else {

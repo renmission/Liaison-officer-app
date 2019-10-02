@@ -1,20 +1,21 @@
 const router = require('express').Router();
 const Category = require('../models/Category');
 const { categoryValidation } = require('../validation');
+const { ensureAuthenticated } = require('../helpers/hbs-helpers');
 
 
-router.get('/', async (req, res) => {
+router.get('/', ensureAuthenticated, async (req, res) => {
     const categories = await Category.find({});
 
     try {
-        res.render('categories', { categories });
+        res.render('categories/index', { categories });
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
 
-router.post('/add', async (req, res) => {
+router.post('/add', ensureAuthenticated, async (req, res) => {
     const { error } = categoryValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -33,22 +34,23 @@ router.post('/add', async (req, res) => {
     }
 });
 
-router.get('/:id', (req, res) => {
-    Category.find({ _id: req.params.id })
-        .then(category => res.render('edit-category', { category }))
-        .catch(err => console.log(err))
+router.get('/:id', ensureAuthenticated, async (req, res) => {
+    const category = await Category.findById({ _id: req.params.id });
+
+    try {
+        res.render('categories/edit', { category });
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
 });
 
-router.put('/:id', async (req, res) => {
-    const { error } = categoryValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+router.put('/:id', ensureAuthenticated, async (req, res) => {
     const category = await Category.findById({ _id: req.params.id })
 
     category.name = req.body.name;
 
     try {
-        const update = await category.save();
+        const updateCategory = await category.save();
         res.redirect('/categories');
     } catch (error) {
         res.status(500).send('Server Error');
@@ -56,7 +58,7 @@ router.put('/:id', async (req, res) => {
 });
 
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
     const category = await Category.findById({ _id: req.params.id });
 
     try {

@@ -1,8 +1,56 @@
 <div class="card">
-    <h5 class="card-header">Featured</h5>
+    <h5 class="card-header">{{patient.hospital}}</h5>
     <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
-        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
+        <h3 class="card-title display-4">{{patient.name}} <span class="badge badge-default badge-pill">
+                <a href="/patients/{{patient.id}}" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
+            </span></h3>
+        <p class="card-text">
+            <strong>Status: </strong> {{#select category}}{{/select}} <br> <br>
+
+            <strong>Room: </strong> {{patient.room}} <br> <br>
+
+            <strong>Card Number: </strong> {{patient.cardNumber}} <br> <br>
+
+            <strong>Company: </strong> {{patient.company}} <br> <br>
+
+            <strong>Birthday: </strong> {{patient.birthday}} <br> <br>
+
+            <strong>Principal: </strong> {{patient.principal}} <br> <br>
+
+            <strong>Principal Birthday: </strong> {{patient.principalBirthday}} <br> <br>
+
+            <strong>Class Name: </strong> {{patient.className}} <br> <br>
+
+            <strong>Plan: </strong> {{patient.plan}} <br> <br>
+
+            <strong>Room And Board Allowance: </strong> {{patient.roomAndBoardAllowance}} <br> <br>
+
+            <strong>SHS: </strong> {{patient.shs}} <br> <br>
+
+            <strong>Util: </strong> {{patient.util}} <br> <br>
+
+            <strong>PEC Waived: </strong> {{patient.pecWaived}} <br> <br>
+
+            <strong>Exp: </strong> {{patient.exp}} <br> <br>
+
+            <strong>FDX: </strong> {{patient.fdx}} <br> <br>
+
+            <strong>GHB: </strong> {{patient.ghb}} <br> <br>
+
+            <strong>PHIC: </strong> {{patient.phic}} <br> <br>
+
+            <strong>Doctor: </strong> {{patient.doctor}} <br> <br>
+
+            <strong>Alga: </strong> {{patient.alga}} <br> <br>
+
+            <strong>Additional Details: </strong> {{patient.additionalDetails}} <br> <br>
+        </p>
     </div>
 </div>
+<br>
+<a href="/patients" class="font-weight-bold"><i class="fas fa-angle-double-left"></i> back to patients</a>
+<br>
+<br>
+
+
+{{> _add }}

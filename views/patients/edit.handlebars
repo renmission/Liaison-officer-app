@@ -47,9 +47,98 @@
         </div>
 
 
+
         <div class="form-group">
-            <label for="">Details:</label>
-            <textarea name="details" cols="30" rows="10" class="form-control" required>{{patient.details}}
+            <label for="">Card Number:</label>
+            <input type="text" name="cardNumber" class="form-control" value="{{patient.cardNumber}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Company:</label>
+            <input type="text" name="company" class="form-control" value="{{patient.company}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Birthday:</label>
+            <input type="text" class="form-control datepicker" name="birthday" value="{{patient.birthday}}"
+                data-provide="datepicker" data-date-format="mm/dd/yyyy">
+        </div>
+
+        <div class="form-group">
+            <label for="">Principal:</label>
+            <input type="text" name="principal" class="form-control" value="{{patient.principal}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Principal Birthday:</label>
+            <input type="text" class="form-control datepicker" name="principalBirthday"
+                value="{{patient.principalBirthday}}" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+        </div>
+
+        <div class="form-group">
+            <label for="">Class Name:</label>
+            <input type="text" name="className" class="form-control" value="{{patient.className}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Plan:</label>
+            <input type="text" name="plan" class="form-control" value="{{patient.plan}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Room And Board Allowance:</label>
+            <input type="text" name="roomAndBoardAllowance" class="form-control"
+                value="{{patient.roomAndBoardAllowance}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">SHS:</label>
+            <input type="text" name="shs" class="form-control" value="{{patient.shs}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Util:</label>
+            <input type="text" name="util" class="form-control" value="{{patient.util}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">PEC Waived:</label>
+            <input type="text" name="pecWaived" class="form-control" value="{{patient.pecWaived}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Exp:</label>
+            <input type="text" name="exp" class="form-control" value="{{patient.exp}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">FDX:</label>
+            <input type="text" name="fdx" class="form-control" value="{{patient.fdx}}" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="">GHB:</label>
+            <input type="text" name="ghb" class="form-control" value="{{patient.ghb}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">PHIC:</label>
+            <input type="text" name="phic" class="form-control" value="{{patient.phic}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Doctor:</label>
+            <input type="text" name="doctor" class="form-control" value="{{patient.doctor}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Alga:</label>
+            <input type="text" name="alga" class="form-control" value="{{patient.alga}}" required>
+        </div>
+        <div class="form-group">
+            <label for="">Additional Details:</label>
+            <textarea name="additionalDetails" cols="30" rows="10" class="form-control" required>{{patient.additionalDetails}}
             </textarea>
         </div>
 

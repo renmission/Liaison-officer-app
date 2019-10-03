@@ -63,18 +63,21 @@ router.post('/register', async (req, res) => {
             res.redirect('register');
         }
 
+        let name = req.body.name;
+        let capitalizeName = name.charAt(0).toUpperCase() + name.slice(1);
+
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(req.body.password, salt);
 
         const newUser = new User({
-            name: req.body.name,
+            name: capitalizeName,
             email: req.body.email,
             password: hash
         });
 
         await newUser.save();
         req.flash('success_msg', 'You now registered and can log in');
-        res.redirect('/login');
+        res.redirect('/');
     }
 })
 

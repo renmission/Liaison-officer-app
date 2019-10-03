@@ -6,7 +6,6 @@ const patientValidation = (data) => {
         name: Joi.string().required(),
         room: Joi.string().required(),
         category: Joi.string().required(),
-        details: Joi.string().required()
     });
 
     return schema.validate(data);
@@ -15,7 +14,6 @@ const patientValidation = (data) => {
 const patientValidationTwo = (data) => {
     const schema = Joi.object({
         category: Joi.string().required(),
-        details: Joi.string().required()
     });
 
     return schema.validate(data);

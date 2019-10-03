@@ -8,7 +8,7 @@ module.exports = {
         }
 
         req.flash('error_msg', 'Not Authorized');
-        res.redirect('/users/login');
+        res.redirect('/');
     },
 
     select: (selected, options) => {

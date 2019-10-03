@@ -1,15 +1,13 @@
-<section class="container pt-xl-5 pl-xl-4">
+<section class="container pt-xl-5 pl-xl-4 ">
     <br>
-    <form action="/patients/add" method="POST">
+    <form action="/patients/add" method="POST" class="mb-10">
         <div class="form-group">
             <label for="">Hospital:</label>
-            <input type="text" name="hospital" class="form-control" value="{{hospital}}"
-                placeholder="Enter hospital name" required autofocus>
+            <input type="text" name="hospital" class="form-control" value="{{hospital}}" required autofocus>
         </div>
         <div class="form-group">
-            <label for="">Name:</label>
-            <input type="text" name="name" class="form-control" value="{{name}}" placeholder="Enter surname, firstname"
-                required>
+            <label for="">Full Name:</label>
+            <input type="text" name="name" class="form-control" value="{{name}}" required>
         </div>
         <div class="form-group">
             <label for="">Category:</label>
@@ -25,15 +23,105 @@
         </div>
         <div class="form-group">
             <label for="">Room:</label>
-            <input type="text" name="room" class="form-control" value="{{room}}" placeholder="Enter room number"
-                required>
+            <input type="text" name="room" class="form-control" value="{{room}}" required>
         </div>
         <div class="form-group">
-            <label for="">Details:</label>
-            <textarea name="details" cols="30" rows="10" class="form-control" required>{{details}}
+            <label for="">Card Number:</label>
+            <input type="text" name="cardNumber" class="form-control" value="{{cardNumber}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Company:</label>
+            <input type="text" name="company" class="form-control" value="{{company}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Birthday:</label>
+            <input type="text" class="form-control datepicker" name="birthday" value="Select date"
+                data-provide="datepicker" data-date-format="mm/dd/yyyy">
+        </div>
+
+        <div class="form-group">
+            <label for="">Principal:</label>
+            <input type="text" name="principal" class="form-control" value="{{principal}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Principal Birthday:</label>
+
+            <input type="text" class="form-control datepicker" name="principalBirthday" value="Select date"
+                data-provide="datepicker" data-date-format="mm/dd/yyyy">
+        </div>
+
+        <div class="form-group">
+            <label for="">Class Name:</label>
+            <input type="text" name="className" class="form-control" value="{{className}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Plan:</label>
+            <input type="text" name="plan" class="form-control" value="{{plan}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Room And Board Allowance:</label>
+            <input type="text" name="roomAndBoardAllowance" class="form-control" value="{{roomAndBoardAllowance}}"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label for="">SHS:</label>
+            <input type="text" name="shs" class="form-control" value="{{shs}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Util:</label>
+            <input type="text" name="util" class="form-control" value="{{util}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">PEC Waived:</label>
+            <input type="text" name="pecWaived" class="form-control" value="{{pecWaived}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Exp:</label>
+            <input type="text" name="exp" class="form-control" value="{{exp}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">FDX:</label>
+            <input type="text" name="fdx" class="form-control" value="{{fdx}}" required>
+        </div>
+
+
+        <div class="form-group">
+            <label for="">GHB:</label>
+            <input type="text" name="ghb" class="form-control" value="{{ghb}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">PHIC:</label>
+            <input type="text" name="phic" class="form-control" value="{{phic}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Doctor:</label>
+            <input type="text" name="doctor" class="form-control" value="{{doctor}}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="">Alga:</label>
+            <input type="text" name="alga" class="form-control" value="{{alga}}" required>
+        </div>
+        <div class="form-group">
+            <label for="">Additional Details:</label>
+            <textarea name="additionalDetails" cols="30" rows="10" class="form-control" required>{{additionalDetails}}
             </textarea>
         </div>
 
         <button type="submit" class="btn btn-primary">Add Patient</button>
+
+
     </form>
 </section>

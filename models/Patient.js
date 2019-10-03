@@ -27,15 +27,83 @@ const patientSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    details: {
-        type: String,
-        required: true
-    },
     myImage: {
         type: String
     },
     slug: {
         type: String
+    },
+    cardNumber: {
+        type: String,
+        required: true
+    },
+    company: {
+        type: String,
+        required: true
+    },
+    birthday: {
+        type: String,
+        required: true
+    },
+    principal: {
+        type: String,
+        required: true
+    },
+    principalBirthday: {
+        type: String,
+        required: true
+    },
+    className: {
+        type: String,
+        required: true
+    },
+    plan: {
+        type: String,
+        required: true
+    },
+    roomAndBoardAllowance: {
+        type: String,
+        required: true
+    },
+    shs: {
+        type: String,
+        required: true
+    },
+    util: {
+        type: String,
+        required: true
+    },
+    pecWaived: {
+        type: String,
+        required: true
+    },
+    exp: {
+        type: String,
+        required: true
+    },
+    fdx: {
+        type: String,
+        required: true
+    },
+    ghb: {
+        type: String,
+        required: true
+    },
+    phic: {
+        type: String,
+        required: true
+    },
+    doctor: {
+        type: String,
+        required: true
+    },
+    alga: {
+        type: String,
+        required: true
+    },
+    additionalDetails: {
+        type: String,
+        required: true
     }
 });
 

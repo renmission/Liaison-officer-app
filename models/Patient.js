@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+// const mongoosastic = require('mongoosastic');
+// const elasticsearch = require('elasticsearch');
+
 
 const Schema = mongoose.Schema;
 
@@ -107,4 +110,18 @@ const patientSchema = new Schema({
     }
 });
 
-module.exports = Patient = mongoose.model('Patient', patientSchema);
+
+// const esClient = new elasticsearch.Client({
+//     host: 'localhost:3000',
+//     log: 'trace',
+//     apiVersion: '7.2',
+// });
+
+// patientSchema.plugin(mongoosastic, {
+//     esClient: esClient
+// })
+
+
+module.exports = mongoose.model('Patient', patientSchema);
+
+

@@ -49,28 +49,44 @@ function checkFileType(file, cb) {
 
 
 router.get('/', ensureAuthenticated, async (req, res) => {
+
+
+
+
     const perPage = 10;
     const page = req.query.page || 1;
 
     try {
-        const patients = Patient.find({ user: req.user.id })
-            .skip((perPage * page) - perPage)
-            .limit(perPage)
-            .populate('category')
-            .then(patients => {
 
-                Patient.collection.countDocuments()
-                    .then(patientCount => {
-                        res.render('patients/index', {
+        if (req.query.search) {
+            const regex = RegExp(escapeRegex(req.query.search), 'gi');
 
-                            patients,
-                            current: parseInt(page),
-                            pages: Math.ceil(patientCount / perPage),
+            const foundPatient = await Patient.find({ name: regex }).populate('category')
 
+            res.render('patients/search', { foundPatient });
+
+        } else {
+
+
+            const patients = Patient.find({ user: req.user.id })
+                .skip((perPage * page) - perPage)
+                .limit(perPage)
+                .populate('category')
+                .then(patients => {
+
+                    Patient.collection.countDocuments()
+                        .then(patientCount => {
+                            res.render('patients/index', {
+
+                                patients,
+                                current: parseInt(page),
+                                pages: Math.ceil(patientCount / perPage),
+
+                            });
                         });
-                    });
-            })
-            .catch(err => console.log(err))
+                })
+                .catch(err => console.log(err))
+        }
     } catch (error) {
         res.status(500).send('Server Error');
     }
@@ -273,25 +289,14 @@ router.put('/:id', ensureAuthenticated, upload, async (req, res) => {
 });
 
 
-
-// router.get('/search', ensureAuthenticated, (req, res) => {
-
-// if (req.query.search) {
-
-//     const regex = new RegExp(escapeRegex(req.query.search), 'gi');
-
-//     Patient.find({ "name": regex }, (err, foundPatient) => {
-
-// if (err) return console.log(err);
-
-// res.render('patients/search', { foundPatient });
-
-//     }).populate('category')
-// } else {
-//     res.redirect('/patients');
-// }
-
-// res.render('patients/search');
+// router.post('/search', (req, res, next) => {
+//     console.log(req.body.search_term);
+//     Patient.search({
+//         query_string: { query: req.body.search_term }
+//     }, (err, results) => {
+//         if (err) return next(err);
+//         res.json(results);
+//     });
 // });
 
 

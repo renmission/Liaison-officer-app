@@ -1,15 +1,18 @@
 <div class="card">
-    <h5 class="card-header">{{patient.hospital}}</h5>
+    <h5 class="card-header">{{patient.hospital.name}}</h5>
     <div class="card-body">
         <h3 class="card-title display-4">{{patient.name}} <span class="badge badge-default badge-pill">
                 <a href="/patients/{{patient.id}}" class="btn btn-secondary"><i class="fas fa-edit"></i> Edit</a>
             </span></h3>
         <p class="card-text">
-            <strong>Status: </strong> {{#select category}}{{/select}} <br> <br>
+            <strong>Status: </strong>{{patient.category.name}} <br> <br>
 
             <strong>Room: </strong> {{patient.room}} <br> <br>
 
-            <strong>Card Number: </strong> {{patient.cardNumber}} <br> <br>
+            <strong>Date of Admission from: </strong> {{patient.dateOfAdmission}} <strong>- </strong>
+            {{patient.dateOfAdmissionTo}}<br> <br>
+
+            <strong>Card Number: </strong> {{patient.cardNum}} <br> <br>
 
             <strong>Company: </strong> {{patient.company}} <br> <br>
 
@@ -51,6 +54,3 @@
 <a href="/patients" class="font-weight-bold"><i class="fas fa-angle-double-left"></i> back to patients</a>
 <br>
 <br>
-
-
-{{> _add }}

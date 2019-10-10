@@ -1,0 +1,28 @@
+<section class="container pt-xl-5 pl-xl-4">
+    <br>
+    <form action="/hospitals/add" method="POST">
+        <div class="form-group">
+            <label for="">Hospital Name:</label>
+            <input type="text" name="name" class="form-control" value="{{name}}" placeholder="Enter hospital name"
+                required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Hospital</button>
+    </form>
+
+    <hr>
+
+    {{#each hospitals}}
+    <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold mb-2">
+        <a href="/hospitals/{{id}}" class="font-weight-bold">
+            {{name}}
+        </a>
+        <span class="badge badge-default badge-pill">
+            <form method="POST" action="/hospitals/{{id}}?_method=DELETE">
+                <button class="btn btn-danger" type="submit"><i class="fas fa-times"></i></button>
+            </form>
+        </span>
+    </li>
+    {{/each}}
+</section>
+
+{{> _add }}

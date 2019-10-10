@@ -16,7 +16,7 @@ router.get('/about', (req, res) => {
 // GET login
 router.get('/', (req, res, next) => {
     if (req.user) return res.render('/patients');
-    res.render('users/login', { layout: 'landing' });
+    res.render('users/login', { layout: 'landing', title: 'Sign In | LO' });
 });
 
 // POST login + passport user authenticate
@@ -34,7 +34,7 @@ router.get('/logout', (req, res) => {
 
 // GET register
 router.get('/register', (req, res) => {
-    res.render('users/register', { layout: 'landing' });
+    res.render('users/register', { layout: 'landing', title: 'Sign Up | LO' });
 });
 
 // POST register

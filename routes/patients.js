@@ -2,6 +2,7 @@ const router = require('express').Router();
 const path = require('path');
 const Patient = require('../models/Patient');
 const Category = require('../models/Category');
+const Hospital = require('../models/Hospital');
 
 const { patientValidation, categoryValidation, patientValidationTwo } = require('../validation');
 const { escapeRegex } = require('../helpers/search');
@@ -23,9 +24,9 @@ const storage = multer.diskStorage({
 // Init Upload
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 1000000 },
+    limits: { fileSize: 3000000 },
     fileFilter: (req, file, cb) => {
-        checkFileType(file, cb)
+        checkFileType(file, cb);
     }
 }).single('myImage');
 
@@ -46,47 +47,40 @@ function checkFileType(file, cb) {
 }
 
 
-
-
 router.get('/', ensureAuthenticated, async (req, res) => {
 
-
-
+    if (req.query.search) {
+        const regex = RegExp(escapeRegex(req.query.search), 'gi');
+        const foundPatient = await Patient.find({ name: regex }).populate('category')
+        res.render('patients/search', { foundPatient });
+    }
 
     const perPage = 10;
     const page = req.query.page || 1;
 
     try {
 
-        if (req.query.search) {
-            const regex = RegExp(escapeRegex(req.query.search), 'gi');
+        const patients = Patient.find({ user: req.user.id })
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .populate('category')
+            .populate('hospital')
+            .then(patients => {
 
-            const foundPatient = await Patient.find({ name: regex }).populate('category')
+                Patient.collection.countDocuments()
+                    .then(patientCount => {
+                        res.render('patients/index', {
 
-            res.render('patients/search', { foundPatient });
+                            patients,
+                            current: parseInt(page),
+                            pages: Math.ceil(patientCount / perPage),
+                            title: `Patients' List`
 
-        } else {
-
-
-            const patients = Patient.find({ user: req.user.id })
-                .skip((perPage * page) - perPage)
-                .limit(perPage)
-                .populate('category')
-                .then(patients => {
-
-                    Patient.collection.countDocuments()
-                        .then(patientCount => {
-                            res.render('patients/index', {
-
-                                patients,
-                                current: parseInt(page),
-                                pages: Math.ceil(patientCount / perPage),
-
-                            });
                         });
-                })
-                .catch(err => console.log(err))
-        }
+                    });
+            })
+            .catch(err => console.log(err))
+
     } catch (error) {
         res.status(500).send('Server Error');
     }
@@ -95,16 +89,17 @@ router.get('/', ensureAuthenticated, async (req, res) => {
 router.get('/add', ensureAuthenticated, async (req, res) => {
     const patient = await Patient.find({});
     const categories = await Category.find({});
+    const hospitals = await Hospital.find({});
 
     try {
-        res.render('patients/add', { patient, categories });
+        res.render('patients/add', { patient, categories, hospitals, title: 'Add Patients' });
     } catch (error) {
         res.status(500).send('Server Error');
     }
 });
 
 
-router.post('/add', ensureAuthenticated, async (req, res) => {
+router.post('/add', ensureAuthenticated, async (req, res, next) => {
     // Validate
     let errors = [];
 
@@ -117,11 +112,13 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
     let hospital = req.body.hospital;
     let name = req.body.name;
     let room = req.body.room;
+    let dateOfAdmission = req.body.dateOfAdmission;
+    let dateOfAdmissionTo = req.body.dateOfAdmissionTo;
     let slug = "";
     if (slug == "")
         slug = name.replace(/\s+/g, '-').toLowerCase();
     let category = req.body.category;
-    let cardNumber = req.body.cardNumber;
+    let cardNum = req.body.cardNum;
     let company = req.body.company;
     let birthday = req.body.birthday;
     let principal = req.body.principal;
@@ -147,27 +144,8 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
             hospital,
             name,
             room,
-            slug,
-            category,
-            cardNumber,
-            company,
-            birthday,
-            principal,
-            principalBirthday,
-            className,
-            plan,
-            roomAndBoardAllowance,
-            shs,
-            util,
-            pecWaived,
-            exp,
-            fdx,
-            ghb,
-            phic,
-            doctor,
-            alga,
-            additionalDetails,
-            user
+            cardNum,
+            dateOfAdmission
         });
     }
 
@@ -175,9 +153,10 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         hospital,
         name,
         room,
+        dateOfAdmission,
+        dateOfAdmissionTo,
         slug,
-        category,
-        cardNumber,
+        cardNum,
         company,
         birthday,
         principal,
@@ -195,6 +174,7 @@ router.post('/add', ensureAuthenticated, async (req, res) => {
         doctor,
         alga,
         additionalDetails,
+        category,
         user
     });
 
@@ -221,10 +201,12 @@ router.delete('/:id', ensureAuthenticated, async (req, res) => {
 });
 
 router.get('/view/:id', async (req, res) => {
-    const patient = await Patient.findById({ _id: req.params.id });
+    const patient = await Patient.findById({ _id: req.params.id })
+        .populate('category')
+        .populate('hospital')
 
     try {
-        res.render('patients/view', { patient })
+        res.render('patients/view', { patient, title: `Patient ${patient.name}` })
     } catch (error) {
         res.status(500).send('Server Error');
     }
@@ -234,6 +216,7 @@ router.get('/:id', ensureAuthenticated, async (req, res) => {
 
     const patient = await Patient.findById({ _id: req.params.id });
     const categories = await Category.find();
+    const hospitals = await Hospital.find();
 
     try {
 
@@ -242,7 +225,7 @@ router.get('/:id', ensureAuthenticated, async (req, res) => {
             res.redirect('/patients');
         }
 
-        res.render('patients/edit', { patient, categories });
+        res.render('patients/edit', { patient, categories, hospitals, title: `Patient ${patient.name}` });
     } catch (error) {
         res.status(500).send('Server Error');
     }
@@ -252,6 +235,7 @@ router.get('/:id', ensureAuthenticated, async (req, res) => {
 router.put('/:id', ensureAuthenticated, upload, async (req, res) => {
     const patient = await Patient.findById({ _id: req.params.id });
 
+    patient.name = req.body.name;
     patient.room = req.body.room;
     patient.category = req.body.category;
     patient.details = req.body.details;
@@ -287,17 +271,6 @@ router.put('/:id', ensureAuthenticated, upload, async (req, res) => {
         console.error('ERROR:', error.message);
     }
 });
-
-
-// router.post('/search', (req, res, next) => {
-//     console.log(req.body.search_term);
-//     Patient.search({
-//         query_string: { query: req.body.search_term }
-//     }, (err, results) => {
-//         if (err) return next(err);
-//         res.json(results);
-//     });
-// });
 
 
 module.exports = router;

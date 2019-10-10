@@ -2,26 +2,64 @@
     <br>
     <form action="/patients/{{patient.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="">Hospital:</label>
-            <input type="text" name="hospital" class="form-control" value="{{patient.hospital}}" disabled>
+            <label for="">Hospitals:</label>
+
+            <select name="hospital" id="hospital" class="form-control">
+
+                {{#select patient.hospital}}
+
+                {{#each hospitals}}
+
+                <option value="{{id}}">{{name}}</option>
+
+                {{/each}}
+
+                {{/select}}
+
+            </select>
+
         </div>
         <div class="form-group">
             <label for="">Name:</label>
-            <input type="text" name="name" class="form-control" value="{{patient.name}}" disabled>
+            <input type="text" name="name" class="form-control" value="{{patient.name}}">
         </div>
 
         <div class="form-group">
             <label for="">Category:</label>
 
             <select name="category" id="category" class="form-control">
-                {{!-- {{#select patient.category}} --}}
+
+                {{#select patient.category}}
+
                 {{#each categories}}
+
                 <option value="{{id}}">{{name}}</option>
+
                 {{/each}}
-                {{!-- {{/select}} --}}
+
+                {{/select}}
             </select>
 
         </div>
+
+
+
+        <div class="form-group">
+            <label for="">Date Of Admission:</label>
+        </div>
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="">from:</span>
+            </div>
+            <input type="text" class="form-control datepicker" name="dateOfAdmission"
+                value="{{patient.dateOfAdmission}}" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="">to:</span>
+            </div>
+            <input type="text" class="form-control datepicker" name="dateOfAdmissionTo"
+                value="{{patient.dateOfAdmissionTo}}" data-provide="datepicker" data-date-format="mm/dd/yyyy">
+        </div>
+        <br>
 
         <div class="form-group">
             <label for="">Room:</label>
@@ -37,7 +75,7 @@
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="inputGroupFile01"
                         aria-describedby="inputGroupFileAddon01" name="myImage">
-                    <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    <label class="custom-file-label" for="inputGroupFile01">Choose file, max 3mb</label>
                 </div>
 
             </div>
@@ -50,7 +88,7 @@
 
         <div class="form-group">
             <label for="">Card Number:</label>
-            <input type="text" name="cardNumber" class="form-control" value="{{patient.cardNumber}}" required>
+            <input type="text" name="cardNum" class="form-control" value="{{patient.cardNum}}" required>
         </div>
 
         <div class="form-group">
@@ -103,12 +141,21 @@
 
         <div class="form-group">
             <label for="">PEC Waived:</label>
-            <input type="text" name="pecWaived" class="form-control" value="{{patient.pecWaived}}" required>
+            <select name="pecWaived" id="" class="form-control">
+
+                {{#select patient.pecWaived}}
+                <option value="Yes"> </option>
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+                {{/select}}
+
+            </select>
         </div>
 
         <div class="form-group">
             <label for="">Exp:</label>
-            <input type="text" name="exp" class="form-control" value="{{patient.exp}}" required>
+            <input type="text" class="form-control datepicker" name="exp" value="{{patient.exp}}"
+                data-provide="datepicker" data-date-format="mm/dd/yyyy">
         </div>
 
         <div class="form-group">

@@ -1,7 +1,4 @@
 const mongoose = require('mongoose');
-// const mongoosastic = require('mongoosastic');
-// const elasticsearch = require('elasticsearch');
-
 
 const Schema = mongoose.Schema;
 
@@ -15,8 +12,8 @@ const patientSchema = new Schema({
         ref: 'categories'
     },
     hospital: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'hospitals'
     },
     name: {
         type: String,
@@ -27,8 +24,11 @@ const patientSchema = new Schema({
         required: true
     },
     dateOfAdmission: {
-        type: Date,
-        default: Date.now
+        type: String,
+        required: true
+    },
+    dateOfAdmissionTo: {
+        type: String,
     },
     myImage: {
         type: String
@@ -36,7 +36,7 @@ const patientSchema = new Schema({
     slug: {
         type: String
     },
-    cardNumber: {
+    cardNum: {
         type: String,
         required: true
     },
@@ -76,10 +76,6 @@ const patientSchema = new Schema({
         type: String,
         required: true
     },
-    pecWaived: {
-        type: String,
-        required: true
-    },
     exp: {
         type: String,
         required: true
@@ -87,6 +83,9 @@ const patientSchema = new Schema({
     fdx: {
         type: String,
         required: true
+    },
+    pecWaived: {
+        type: String,
     },
     ghb: {
         type: String,
@@ -109,17 +108,6 @@ const patientSchema = new Schema({
         required: true
     }
 });
-
-
-// const esClient = new elasticsearch.Client({
-//     host: 'localhost:3000',
-//     log: 'trace',
-//     apiVersion: '7.2',
-// });
-
-// patientSchema.plugin(mongoosastic, {
-//     esClient: esClient
-// })
 
 
 module.exports = mongoose.model('Patient', patientSchema);

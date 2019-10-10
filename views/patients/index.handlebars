@@ -31,12 +31,15 @@
     <li class="list-group-item d-flex justify-content-between align-items-center font-weight-bold mb-2"
         id="searchResults">
         <blockquote class="blockquote mb-0">
+            <input type="hidden" value="{{hospital._id}}">
             <h5 class="card-title"> <a href="/patients/view/{{id}}" class="font-weight-bold">
-                    {{name}} | {{hospital}}
+                    {{name}} | {{hospital.name}}
                 </a></h5>
             <footer class="blockquote-footer">
                 <cite title="{{category._id}}">{{category.name}}</cite>
             </footer>
+
+
         </blockquote>
 
         <span class="badge badge-default badge-pill">

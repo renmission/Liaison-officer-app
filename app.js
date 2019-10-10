@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const methodOverride = require('method-override');
 const flash = require('connect-flash');
-const morgan = require('morgan');
 
 const passport = require('passport');
 
@@ -20,7 +19,6 @@ mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTo
     console.log('DB connection successfully.');
 });
 
-app.use(morgan('tiny'));
 
 app.use(methodOverride('_method'));
 
@@ -55,13 +53,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // SET template engine
 const { select, generateDate, paginate } = require('./helpers/hbs-helpers');
-app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: { select: select, generateDate: generateDate, paginate: paginate } }));
+app.engine('handlebars', exphbs({ defaultLayout: 'main', helpers: { select, generateDate, paginate } }));
 app.set('view engine', 'handlebars');
 
 // Init Routes
 app.use('/', require('./routes/auth'));
 app.use('/patients', require('./routes/patients'));
 app.use('/categories', require('./routes/categories'));
+app.use('/hospitals', require('./routes/hospitals'));
 
 const port = process.env.PORT || 3000;
 

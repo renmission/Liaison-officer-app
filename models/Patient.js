@@ -25,7 +25,6 @@ const patientSchema = new Schema({
     },
     dateOfAdmission: {
         type: String,
-        required: true
     },
     dateOfAdmissionTo: {
         type: String,

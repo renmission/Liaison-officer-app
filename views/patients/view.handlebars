@@ -47,6 +47,15 @@
             <strong>Alga: </strong> {{patient.alga}} <br> <br>
 
             <strong>Additional Details: </strong> {{patient.additionalDetails}} <br> <br>
+
+
+            {{#if patient.myImage}}
+            <strong>LOG: </strong><br>
+            <img src="/uploads/{{patient.myImage}}" id="myImage" alt="" width="150" style="margin: 50px">
+            {{else}}
+            <strong>LOG:</strong>
+            <p class="lead">No log upload yet!</p>
+            {{/if}}
         </p>
     </div>
 </div>
@@ -54,3 +63,5 @@
 <a href="/patients" class="font-weight-bold"><i class="fas fa-angle-double-left"></i> back to patients</a>
 <br>
 <br>
+
+{{> _mymodals }}

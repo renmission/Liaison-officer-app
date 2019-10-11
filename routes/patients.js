@@ -47,13 +47,17 @@ function checkFileType(file, cb) {
 }
 
 
-router.get('/', ensureAuthenticated, async (req, res) => {
 
+router.get('/search', async (req, res) => {
     if (req.query.search) {
         const regex = RegExp(escapeRegex(req.query.search), 'gi');
-        const foundPatient = await Patient.find({ name: regex }).populate('category')
+        const foundPatient = await Patient.find({ name: regex }).populate('category').populate('hospital')
         res.render('patients/search', { foundPatient });
     }
+});
+
+router.get('/', ensureAuthenticated, async (req, res) => {
+
 
     const perPage = 10;
     const page = req.query.page || 1;
